@@ -1,0 +1,37 @@
+{
+  "dev_env": {
+    "HOST": "devdb.example.com",
+    "PORT": "5432",
+    "USER": "devuser",
+    "PW": "secureDevPass!",
+    "DB": "project_alpha"
+  },
+  "production": {
+    "HOST": "prod-sql01.cloudhost.net",
+    "PORT": "5432",
+    "USER": "app_admin",
+    "PW": "SuP3rS3cr3tP@ssw0rd",
+    "DB": "main_data_store"
+  },
+  "testing_server": {
+    "HOST": "testbox-03.local",
+    "PORT": "5432",
+    "USER": "tester",
+    "PW": "test_pass_123",
+    "DB": "qa_database"
+  },
+  "personal_vm": {
+    "HOST": "my-vm.lan",
+    "PORT": "5432",
+    "USER": "myuser",
+    "PW": "vmPassword#7",
+    "DB": "personal_projects"
+  },
+  "backup_db": {
+    "HOST": "backup-server.internal",
+    "PORT": "5433",
+    "USER": "backup_agent",
+    "PW": "BackupAccessKey%",
+    "DB": "archived_data"
+  }
+}
