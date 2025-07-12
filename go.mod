@@ -1,4 +1,4 @@
-module ALEXANDRITE
+module github.com/lach-killerpythons/alexandrite
 
 go 1.22.2
 

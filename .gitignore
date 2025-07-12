@@ -1,7 +1,7 @@
 # .gitignore
 # these are not needed
-main.go
-table_sql.html
-company_profile.html
+/misc/main.go
+/misc/table_sql.html
+/misc/company_profile.html
 # credentials
 /JADE/db.json
