@@ -1,4 +1,4 @@
-package main
+package RED
 
 import (
 	"bufio"
@@ -335,31 +335,32 @@ func IsList(rdb *redis.Client, listKey string) bool {
 
 }
 
-func main() {
+// migrate these to tests
+// func main() {
 
-	piRedDB := NewRedDB("pi.local", "pi", 0)
-	pi_rdbClient, err := piRedDB.New_Connection()
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		_ = GetAllKeys(pi_rdbClient)
-	}
+// 	piRedDB := NewRedDB("pi.local", "pi", 0)
+// 	pi_rdbClient, err := piRedDB.New_Connection()
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	} else {
+// 		_ = GetAllKeys(pi_rdbClient)
+// 	}
 
-	lRedDB := NewRedDB("localhost", "", 0)
-	localClient, err := lRedDB.New_Connection()
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		_ = GetAllKeys(localClient)
-	}
+// 	lRedDB := NewRedDB("localhost", "", 0)
+// 	localClient, err := lRedDB.New_Connection()
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	} else {
+// 		_ = GetAllKeys(localClient)
+// 	}
 
-	lRedDB.db_number = 1
-	localClient, err = lRedDB.New_Connection()
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		_ = GetAllKeys(localClient)
+// 	lRedDB.db_number = 1
+// 	localClient, err = lRedDB.New_Connection()
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	} else {
+// 		_ = GetAllKeys(localClient)
 
-	}
+// 	}
 
-}
+// }
