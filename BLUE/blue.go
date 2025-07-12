@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	JADE "github.com/lach-killerpythons/alexandrite/JADE"
+	"github.com/lach-killerpythons/alexandrite/JADE"
 
 	_ "github.com/lib/pq"
 )
