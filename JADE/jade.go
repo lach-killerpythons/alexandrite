@@ -1,5 +1,3 @@
-//package main
-
 package JADE
 
 import (
