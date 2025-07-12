@@ -3,7 +3,6 @@ package BLUE
 //package main
 
 import (
-	JADE "ALEXANDRITE/JADE"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -11,6 +10,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	JADE "github.com/lach-killerpythons/alexandrite/JADE"
 
 	_ "github.com/lib/pq"
 )
