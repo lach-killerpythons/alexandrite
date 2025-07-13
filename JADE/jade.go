@@ -94,9 +94,12 @@ func GET_DB_creds(dataObj string) (DB_creds, error) {
 }
 
 func OPEN_DB_creds(myFile JADE_FILE, dataObj string) (DB_creds, error) { // hardcoded
-	//var output []string
 
-	fmt.Println("Warning! Using hardcoded JadeFile ")
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(err) //
+	}
+	defer os.Chdir(cwd) // set cwd back
 
 	Name := ""
 	Port := ""
@@ -157,6 +160,7 @@ func OPEN_DB_creds(myFile JADE_FILE, dataObj string) (DB_creds, error) { // hard
 	}
 
 	//return []string{Name, Port, User, Host}
+	fmt.Printf("JADE: loaded creds for: %s \n", Name)
 	return DB_creds{Name, Port, User, Host, PW}, nil
 
 }

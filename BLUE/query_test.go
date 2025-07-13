@@ -63,6 +63,7 @@ func TestQuery(t *testing.T) {
 	// query each DB for table blue_test
 	// select first row
 	// insert
+	//DB_JadeConnect(sddd)
 	testDBs := []string{"pi", "mac", "local"}
 	desiredOutput := []string{"1", "Test entry"} // first row of blue_test
 	for i, db := range testDBs {

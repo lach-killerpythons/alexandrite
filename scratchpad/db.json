@@ -1,0 +1,9 @@
+{
+  "local": {
+    "HOST": "localhost",
+    "PORT": "5432",
+    "USER": "lach",
+    "PW": "daddyy",
+    "DB": "babylon"
+  }
+}
