@@ -5,3 +5,7 @@
 /misc/company_profile.html
 # credentials
 /JADE/db.json
+#scratchpad
+/scratchpad
+/scratchpad/db.json
+/scratchpad/main.go
