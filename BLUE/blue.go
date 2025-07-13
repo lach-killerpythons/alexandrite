@@ -58,34 +58,50 @@ type id_sequence struct {
 	name string
 }
 
-// deprecate
-func xDB(name string) DB {
+func DB_Connect(name string) (DB, error) {
 	var emptyDB DB
 	dbc, err := JADE.GET_DB_creds(name)
 	if err != nil {
 		fmt.Println("JADE credentials error:", err)
-		return emptyDB
+		return emptyDB, err
 	}
-	fmt.Println(dbc.Name, dbc.User)
+	//fmt.Println(dbc.Name, dbc.User)
 	port_int, err := strconv.Atoi(dbc.Port)
 	if err != nil {
 		fmt.Println(err)
 		port_int = 5432
 	}
-	newDB := DB{
+	db := DB{
 		Host:     dbc.Host,
 		Port:     port_int,
 		User:     dbc.User,
 		Password: dbc.PW,
 		Dbname:   dbc.Name,
 	}
-	return connectDB(newDB)
+	var errOpen error
+	// connection string
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable",
+		db.Host, db.Port, db.User, db.Password, db.Dbname)
+	//psql parser
+	db.p, errOpen = sql.Open("postgres", psqlInfo)
+	if errOpen != nil {
+		fmt.Println(psqlInfo)
+		return emptyDB, errOpen
+	}
+	errPing := db.p.Ping()
+
+	if errPing != nil {
+		return emptyDB, errPing
+	}
+	// error is nil if no errors
+	return db, nil
 
 }
 
-func DB_Connect(name string) (DB, error) {
+// JADE_FILE{name, location} -> specify file location before opening
+func DB_JadeConnect(name string, jade_file JADE.JADE_FILE) (DB, error) {
 	var emptyDB DB
-	dbc, err := JADE.GET_DB_creds(name)
+	dbc, err := JADE.OPEN_DB_creds(jade_file, name) // get DB credentials
 	if err != nil {
 		fmt.Println("JADE credentials error:", err)
 		return emptyDB, err
