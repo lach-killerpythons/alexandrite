@@ -20,22 +20,22 @@ type RedDB struct {
 	db_number int
 }
 
+func (rdb RedDB) GetP() *redis.Client {
+	return rdb.p
+}
+
 var (
-	KeyDB *redis.Client
-	CTX   = context.Background()
+	CTX = context.Background()
 )
 
-func NewRedDB(address string, pw string, db_number int) RedDB {
+func NewRedDB(address string, pw string, db_number int) (RedDB, error) {
 	default_port := ":6379"
-	return RedDB{
+	rdb := RedDB{
 		addess:    address + default_port,
 		pw:        pw,
 		db_number: db_number,
 	}
-}
 
-func (rdb RedDB) New_Connection() (*redis.Client, error) {
-	var placeholder *redis.Client
 	new_redis_client := redis.NewClient(&redis.Options{
 		Addr:     rdb.addess,    // host:port of the redis server
 		Password: rdb.pw,        // no password set
@@ -44,15 +44,17 @@ func (rdb RedDB) New_Connection() (*redis.Client, error) {
 	// ping client
 	_, err := new_redis_client.Ping(CTX).Result()
 	if err != nil {
-		return placeholder, err
+		return rdb, err
 	}
 	rdb.p = new_redis_client
-	return new_redis_client, nil
+	return rdb, nil
 }
 
+//(2) ⛳ Attach all these functions to (rb RedDB)
+
 // get all keys in a redis DB
-func GetAllKeys(rdb *redis.Client) []byte {
-	result, err := rdb.Keys(CTX, "*").Result()
+func (rdb RedDB) GetAllKeys() []byte {
+	result, err := rdb.p.Keys(CTX, "*").Result()
 	if err != nil {
 		panic(err)
 	}
@@ -64,7 +66,7 @@ func GetAllKeys(rdb *redis.Client) []byte {
 	var hashs []string
 
 	for _, val := range result {
-		myType, err := rdb.Type(CTX, val).Result()
+		myType, err := rdb.p.Type(CTX, val).Result()
 		if err != nil {
 			panic(err)
 		}
@@ -101,13 +103,15 @@ func GetAllKeys(rdb *redis.Client) []byte {
 		fmt.Println("Error marshaling JSON:", err)
 	}
 
-	fmt.Println("Generated JSON:")
-	fmt.Println(string(jsonData))
+	// dont need to dupe this
+	//fmt.Println("Generated JSON:")
+	//fmt.Println(string(jsonData))
 
 	return jsonData
 }
 
-func SetKey(rdb *redis.Client, keyname string, val interface{}) {
+func (rdbX RedDB) SetKey(keyname string, val interface{}) {
+	rdb := rdbX.p
 	switch v := val.(type) {
 	case int:
 		rdb.Set(CTX, keyname+"_str", v, 0)
@@ -118,7 +122,9 @@ func SetKey(rdb *redis.Client, keyname string, val interface{}) {
 	}
 }
 
-func AddToSet(rdb *redis.Client, setname string, inputs interface{}) {
+// func (rdb RedDB)
+func (rdbX RedDB) AddToSet(setname string, inputs interface{}) {
+	rdb := rdbX.p
 	f, ok := inputs.([]string)
 	if ok && len(f) == 0 {
 		return
@@ -130,20 +136,8 @@ func AddToSet(rdb *redis.Client, setname string, inputs interface{}) {
 	fmt.Println("AddToSet", result)
 }
 
-// LIST FUNCTIONS
-//  _       _________ _______ _________ _______
-// ( \      \__   __/(  ____ \\__   __/(  ____ \
-// | (         ) (   | (    \/   ) (   | (    \/
-// | |         | |   | (_____    | |   | (_____
-// | |         | |   (_____  )   | |   (_____  )
-// | |         | |         ) |   | |         ) |
-// | (____/\___) (___/\____) |   | |   /\____) |
-// (_______/\_______/\_______)   )_(   \_______)
-
-// Txt2List, List_RandItem
-
-// convert a textfile into a redis list
-func Txt2List(rdb *redis.Client, keyname string, targetFile string) {
+func (rdbX RedDB) Txt2List(keyname string, targetFile string) {
+	rdb := rdbX.p
 	file, err := os.Open(targetFile)
 	if err != nil {
 		fmt.Printf("Error opening file: %v\n", err)
@@ -162,7 +156,8 @@ func Txt2List(rdb *redis.Client, keyname string, targetFile string) {
 }
 
 // get a random list item
-func List_RandItem(rdb *redis.Client, keyname string) string {
+func (rdbX RedDB) List_RandItem(keyname string) string {
+	rdb := rdbX.p
 	listLen, err := rdb.LLen(CTX, keyname).Result() //
 	if err != nil {
 		return err.Error()
@@ -177,7 +172,8 @@ func List_RandItem(rdb *redis.Client, keyname string) string {
 }
 
 // add to a list (Lpush)
-func List_Add(rdb *redis.Client, keyname string, val string) string { // 1 is success
+func (rdbX RedDB) List_Add(keyname string, val string) string { // 1 is success
+	rdb := rdbX.p
 	err := rdb.LPush(CTX, keyname, val).Err()
 	if err != nil {
 		fmt.Println("something failed", err)
@@ -188,8 +184,9 @@ func List_Add(rdb *redis.Client, keyname string, val string) string { // 1 is su
 }
 
 // del from a list (LRem)
-func List_DelStr(key string, targetList string, kdb *redis.Client) (string, int) {
-	result, err := kdb.Do(CTX, "LREM", targetList, 0, key).Result()
+func (rdbX RedDB) List_DelStr(key string, targetList string) (string, int) {
+	rdb := rdbX.p
+	result, err := rdb.Do(CTX, "LREM", targetList, 0, key).Result()
 	i_result := int(result.(int64))
 	fmt.Println("n removed:", i_result)
 	if err != nil {
@@ -201,7 +198,8 @@ func List_DelStr(key string, targetList string, kdb *redis.Client) (string, int)
 }
 
 // return the json byte string
-func List2JSON(rdb *redis.Client, listKey string) []byte {
+func (rdbX RedDB) List2JSON(listKey string) []byte {
+	rdb := rdbX.p
 	var output []byte
 	values, err := rdb.LRange(CTX, listKey, 0, -1).Result()
 	if err != nil {
@@ -219,7 +217,8 @@ func List2JSON(rdb *redis.Client, listKey string) []byte {
 }
 
 // returns the string array too
-func List2JSON_alpha(rdb *redis.Client, listKey string) ([]string, []byte) {
+func (rdbX RedDB) List2JSON_alpha(listKey string) ([]string, []byte) {
+	rdb := rdbX.p
 	var output []byte
 	var strArr []string
 	values, err := rdb.LRange(CTX, listKey, 0, -1).Result()
@@ -237,7 +236,8 @@ func List2JSON_alpha(rdb *redis.Client, listKey string) ([]string, []byte) {
 	return values, jsonData
 }
 
-func List2_1wordset(rdb *redis.Client, listName string, setName string) {
+func (rdbX RedDB) List2_1wordset(listName string, setName string) {
+	rdb := rdbX.p
 	values, err := rdb.LRange(CTX, listName, 0, -1).Result()
 	if err != nil {
 		fmt.Printf("Failed to read Redis list: %v \n", err)
@@ -245,27 +245,14 @@ func List2_1wordset(rdb *redis.Client, listName string, setName string) {
 	}
 	for _, s := range values {
 		str_split := strings.Split(s, " ")
-		AddToSet(rdb, setName, str_split)
+
+		rdbX.AddToSet(setName, str_split)
 	}
 
 }
 
-//  _   _  _____ _____ _____
-// | | | |/  ___|  ___|_   _|
-// | |_| |\ `--.| |__   | |
-// |  _  | `--. \  __|  | |
-// | | | |/\__/ / |___  | |
-// \_| |_/\____/\____/  \_/
-//
-// Store object-like data : { key1:1value, key2:value2...}
-// 🟥 HGETALL h_test             -> return all keys and values
-// 🟥 HVALS h_test               -> return all vals
-// 🟥 HGET h_test c1             -> return h_test[c1] (value)
-// 🟥 HSET h_test field1 "Hello" -> add {field1:"Hello"}
-// 🟥 HINCRBY h_test joon 1      -> add 1 HSET (one str at a time)
-// 🟥 HMGET h_test field1 field2 -> get multiple field values
-
-func AddToHSet(xbd *redis.Client, hsetName, keyname string, val interface{}) {
+func (rdbX RedDB) AddToHSet(hsetName, keyname string, val interface{}) {
+	rdb := rdbX.p
 
 	var valStr string
 	switch v := val.(type) {
@@ -277,7 +264,7 @@ func AddToHSet(xbd *redis.Client, hsetName, keyname string, val interface{}) {
 		fmt.Println("passed wrong type to setKey!", v)
 		return
 	}
-	r, err := xbd.HSet(CTX, hsetName, keyname, valStr).Result()
+	r, err := rdb.HSet(CTX, hsetName, keyname, valStr).Result()
 	if err != nil {
 		fmt.Println("failed to add to Hset", hsetName, r)
 		fmt.Println(err)
@@ -287,31 +274,18 @@ func AddToHSet(xbd *redis.Client, hsetName, keyname string, val interface{}) {
 
 }
 
-func CummulativeHSET(xdb *redis.Client, hsetName string, input string) {
-	_, err := xdb.HIncrBy(CTX, hsetName, input, 1).Result()
+func (rdbX RedDB) CummulativeHSET(hsetName string, input string) {
+	rdb := rdbX.p
+	_, err := rdb.HIncrBy(CTX, hsetName, input, 1).Result()
 	if err != nil {
 		panic(err)
 	}
 
 }
 
-//  ______ _____ _____ _____
-// |___  //  ___|  ___|_   _|
-//    / / \ `--.| |__   | |
-//   / /   `--. \  __|  | |
-// ./ /___/\__/ / |___  | |
-// \_____/\____/\____/  \_/
-//
-// ZSET --Store unique, ordered collections with scores (rankings)
-// 🟥 ZRANGE key start stop [WITHSCORES]: Get members by index (rank).
-// 🟥 ZRANGEBYSCORE key min max [WITHSCORES]: Get members by score range.
-// 🟥 ZREM key member: Remove a member.
-// 🟥 ZSCORE key member: Get the score of a specific member.
-// 🟥 ZRANK key member: Get the rank (0-based index) of a member.
-// 🟥 ZINCRBY key increment member: Increment the score of a member
-
-func CummulativeZSET(xdb *redis.Client, hsetName string, input string) {
-	_, err := xdb.ZIncrBy(CTX, hsetName, 1, input).Result()
+func (rdbX RedDB) CummulativeZSET(hsetName string, input string) {
+	rdb := rdbX.p
+	_, err := rdb.ZIncrBy(CTX, hsetName, 1, input).Result()
 	if err != nil {
 		panic(err)
 	}
@@ -319,7 +293,8 @@ func CummulativeZSET(xdb *redis.Client, hsetName string, input string) {
 }
 
 // check if list exists
-func IsList(rdb *redis.Client, listKey string) bool {
+func (rdbX RedDB) IsList(listKey string) bool {
+	rdb := rdbX.p
 	keyType, err := rdb.Type(CTX, listKey).Result()
 	if err != nil {
 		fmt.Println(err)
@@ -334,33 +309,3 @@ func IsList(rdb *redis.Client, listKey string) bool {
 	}
 
 }
-
-// migrate these to tests
-// func main() {
-
-// 	piRedDB := NewRedDB("pi.local", "pi", 0)
-// 	pi_rdbClient, err := piRedDB.New_Connection()
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	} else {
-// 		_ = GetAllKeys(pi_rdbClient)
-// 	}
-
-// 	lRedDB := NewRedDB("localhost", "", 0)
-// 	localClient, err := lRedDB.New_Connection()
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	} else {
-// 		_ = GetAllKeys(localClient)
-// 	}
-
-// 	lRedDB.db_number = 1
-// 	localClient, err = lRedDB.New_Connection()
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	} else {
-// 		_ = GetAllKeys(localClient)
-
-// 	}
-
-// }
