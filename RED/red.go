@@ -20,6 +20,15 @@ type RedDB struct {
 	db_number int
 }
 
+type R_TYPE string
+
+const (
+	R_LIST R_TYPE = "LIST"
+	R_HSET R_TYPE = "HSET"
+	R_ZSET R_TYPE = "ZSET"
+	R_SET  R_TYPE = "SET"
+)
+
 func (rdb RedDB) GetP() *redis.Client {
 	return rdb.p
 }
@@ -50,9 +59,6 @@ func NewRedDB(address string, pw string, db_number int) (RedDB, error) {
 	return rdb, nil
 }
 
-//(2) ⛳ Attach all these functions to (rb RedDB)
-
-// get all keys in a redis DB
 func (rdb RedDB) GetAllKeys() []byte {
 	result, err := rdb.p.Keys(CTX, "*").Result()
 	if err != nil {
@@ -125,10 +131,13 @@ func (rdbX RedDB) SetKey(keyname string, val interface{}) {
 // func (rdb RedDB)
 func (rdbX RedDB) AddToSet(setname string, inputs interface{}) {
 	rdb := rdbX.p
-	f, ok := inputs.([]string)
-	if ok && len(f) == 0 {
-		return
-	}
+
+	// ADD []string or string
+	// f, ok := inputs.([]string)
+	// if ok && len(f) == 0 {
+	// 	return
+	// }
+
 	result, err := rdb.SAdd(CTX, setname, inputs).Result()
 	if err != nil {
 		fmt.Println(err)
@@ -251,6 +260,25 @@ func (rdbX RedDB) List2_1wordset(listName string, setName string) {
 
 }
 
+func (rdbX RedDB) ListDo(listName string, f func(...any)) {
+	//r_query := fmt.Sprintf(`lrange %s 0 -1`, listName)
+	// result, err := rdbX.GetP().Do(CTX, "LRANGE", listName, 0, -1).Result()
+	result, err := rdbX.GetP().Do(CTX, "LRANGE", listName, 0, -1).Result()
+	if err != nil {
+		fmt.Printf("Redis LRANGE error: %v", err)
+		return
+	}
+
+	items, ok := result.([]interface{})
+	if !ok {
+		fmt.Printf("Unexpected result type: %T", result)
+		return
+	}
+
+	f(items...)
+
+}
+
 func (rdbX RedDB) AddToHSet(hsetName, keyname string, val interface{}) {
 	rdb := rdbX.p
 
@@ -274,6 +302,8 @@ func (rdbX RedDB) AddToHSet(hsetName, keyname string, val interface{}) {
 
 }
 
+// 💡 wildtype -> is H v Z
+
 func (rdbX RedDB) CummulativeHSET(hsetName string, input string) {
 	rdb := rdbX.p
 	_, err := rdb.HIncrBy(CTX, hsetName, input, 1).Result()
@@ -293,6 +323,7 @@ func (rdbX RedDB) CummulativeZSET(hsetName string, input string) {
 }
 
 // check if list exists
+// 💡 implement wildtype - IsX (key string, rt REDIS_TYPE)
 func (rdbX RedDB) IsList(listKey string) bool {
 	rdb := rdbX.p
 	keyType, err := rdb.Type(CTX, listKey).Result()
@@ -309,3 +340,7 @@ func (rdbX RedDB) IsList(listKey string) bool {
 	}
 
 }
+
+// 💡 Feature ideas
+// faux string enum for redis types
+//

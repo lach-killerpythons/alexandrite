@@ -24,6 +24,15 @@ type DB_creds struct {
 	PW   string
 }
 
+func Open(FileName string, FileLocation string) JADE_FILE {
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	fl := cwd + FileLocation
+	return JADE_FILE{FileName, fl}
+}
+
 // hardcoded
 func GET_DB_creds(dataObj string) (DB_creds, error) {
 	fmt.Println("Warning! Using hardcoded JadeFile ")
@@ -99,6 +108,7 @@ func OPEN_DB_creds(myFile JADE_FILE, dataObj string) (DB_creds, error) { // hard
 	if err != nil {
 		panic(err) //
 	}
+	//myFile.Location = cwd + myFile.Location
 	defer os.Chdir(cwd) // set cwd back
 
 	Name := ""

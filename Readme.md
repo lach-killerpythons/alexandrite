@@ -1,6 +1,20 @@
-## ALEXANDRITE
+# ALEXANDRITE
 
 working tools in Go for PSQL and REDIS
+
+## Connect to PSQL DB
+
+`	// set the credentials file location
+  jade := JADE.JADE_FILE{"db.json", cwd + "/req"}
+  // Return BLUE DB objct (psql)	
+	DBx, err := BLUE.DB_JadeConnect("local", jade) `
+
+## Connect to Redis DB
+
+` // connect to example "localhost" pw:"" db:0 
+	red := NewRedDB("localhost", "", 0)
+	rdb, err := red.New_Connection() `
+
 
 # BLUE
 PSQL

@@ -1,0 +1,48 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.16 Chrome/132.0.6834.196 Electron/34.2.0 Safari/537.36" version="26.0.16">
+  <diagram name="Page-1" id="s9OVfWRsLfnsmI88_OYR">
+    <mxGraphModel dx="1114" dy="355" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="QU12qqyrVzlJ5T-KhF4X-2" target="QU12qqyrVzlJ5T-KhF4X-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-2" value="RedDB (redis)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="550" y="180" width="260" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-14" value="&lt;div style=&quot;color: #cccccc;background-color: #1f1f1f;font-family: &#39;Droid Sans Mono&#39;, &#39;monospace&#39;, monospace;font-weight: normal;font-size: 14px;line-height: 19px;white-space: pre;&quot;&gt;&lt;div&gt;&lt;span style=&quot;color: #569cd6;&quot;&gt;type&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;RedDB&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: #569cd6;&quot;&gt;struct&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt; {&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;p&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;         &lt;/span&gt;&lt;span style=&quot;color: #d4d4d4;&quot;&gt;*&lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;redis&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;.&lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;Client&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;addess&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;pw&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;        &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;db_number&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;int&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="QU12qqyrVzlJ5T-KhF4X-2">
+          <mxGeometry x="10" y="20" width="260" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-3" value="DB (psql)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="180" width="210" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-12" value="&lt;div style=&quot;color: #cccccc;background-color: #1f1f1f;font-family: &#39;Droid Sans Mono&#39;, &#39;monospace&#39;, monospace;font-weight: normal;font-size: 14px;line-height: 19px;white-space: pre;&quot;&gt;&lt;div&gt;&lt;span style=&quot;color: #569cd6;&quot;&gt;type&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;DB&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: #569cd6;&quot;&gt;struct&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt; {&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;p&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;        &lt;/span&gt;&lt;span style=&quot;color: #d4d4d4;&quot;&gt;*&lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;sql&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;.&lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;DB&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;Host&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;     &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;Port&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;     &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;int&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;User&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;     &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;Password&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;Dbname&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;   &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;Table&lt;/span&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: #4ec9b0;&quot;&gt;myTable&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: #cccccc;&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="QU12qqyrVzlJ5T-KhF4X-3">
+          <mxGeometry x="10" y="20" width="200" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-4" value="JADE (json)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="314" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-5" value="&lt;font style=&quot;color: rgb(255, 51, 51);&quot;&gt;load db.json credentials&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="QU12qqyrVzlJ5T-KhF4X-4">
+          <mxGeometry x="70" y="30" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-9" value="rdb.json&lt;div&gt;credentials&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="QU12qqyrVzlJ5T-KhF4X-4">
+          <mxGeometry x="70" y="85" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-10" value="TABLESTORY" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="QU12qqyrVzlJ5T-KhF4X-4">
+          <mxGeometry x="55" y="140" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="QU12qqyrVzlJ5T-KhF4X-3" target="QU12qqyrVzlJ5T-KhF4X-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-7" value="DB_JadeConnect()" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="QU12qqyrVzlJ5T-KhF4X-6">
+          <mxGeometry x="-0.3826" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QU12qqyrVzlJ5T-KhF4X-13" value="Host, Port, User, Password, Dbname" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

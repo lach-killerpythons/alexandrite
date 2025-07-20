@@ -1,0 +1,84 @@
+
+# ASCII art credit (RubiFont) https://patorjk.com/software/taag/#p=display&f=RubiFont
+
+▗▖ ▗▖▗▄▄▄▖▗▖  ▗▖
+▐▌▗▞▘▐▌    ▝▚▞▘ 
+▐▛▚▖ ▐▛▀▀▘  ▐▌  
+▐▌ ▐▌▐▙▄▄▖  ▐▌  
+
+ STRING/Int -- Store and retrieve a single string value
+ 🟥 SET key value: Set the value of a key.
+ 🟥 GET key: Get the value of a key.
+ 🟥 DEL key: Delete the key.
+ 🟥 EXISTS key: Check if the key exists.
+ 🟥 INCR key: Increment numeric value by 1.
+ 🟥 DECR key: Decrement numeric value by 1.
+ 🟥 EXPIRE key seconds: Set a time-to-live (TTL) for the key.
+ 🟥 TTL key: Get the remaining TTL for the key.
+
+
+ LIST FUNCTIONS
+▗▖   ▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▄▄▖
+▐▌     █  ▐▌     █ ▐▌   
+▐▌     █   ▝▀▚▖  █  ▝▀▚▖
+▐▙▄▄▖▗▄█▄▖▗▄▄▞▘  █ ▗▄▄▞▘
+
+
+ LIST -- Store ordered collections of strings (can contain duplicates)
+ 🟥 LPUSH key value [value ...]: Push values to the **left** (head).
+ 🟥 RPUSH key value [value ...]: Push values to the **right** (tail).
+ 🟥 LPOP key: Remove and return the **leftmost** (head) element.
+ 🟥 RPOP key: Remove and return the **rightmost** (tail) element.
+ 🟥 LRANGE key start stop: Get a range of elements by index.  eg:`lrange myList 0 -1`
+ 🟥 LINDEX key index: Get element at a specific index.
+ 🟥 LLEN key: Get the length of the list.
+ 🟥 LREM key count value: Remove elements equal to value (count controls direction/amount).
+ 🟥 LSET key index value: Set the value at a specific index.
+ 🟥 LTRIM key start stop: Trim the list to a specified range.
+
+▗▖ ▗▖ ▗▄▄▖▗▄▄▄▖▗▄▄▄▖
+▐▌ ▐▌▐▌   ▐▌     █  
+▐▛▀▜▌ ▝▀▚▖▐▛▀▀▘  █  
+▐▌ ▐▌▗▄▄▞▘▐▙▄▄▖  █ 
+
+HSET is a command used with Redis Hashes, not Sets.
+## IS UNORDERED
+A Redis Hash is essentially a map or dictionary:
+key -> field -> value
+ Store object-like data : { key1:1value, key2:value2...}
+ 🟥 HGETALL h_test             -> return all keys and values
+ 🟥 HVALS h_test               -> return all vals
+ 🟥 HGET h_test c1             -> return h_test[c1] (value)
+ 🟥 HSET h_test field1 "Hello" -> add {field1:"Hello"}
+ 🟥 HINCRBY h_test joon 1      -> add 1 HSET (one str at a time)
+ 🟥 HMGET h_test field1 field2 -> get multiple field values
+
+▗▄▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▄▄▄▖
+   ▗▞▘▐▌   ▐▌     █  
+ ▗▞▘   ▝▀▚▖▐▛▀▀▘  █  
+▐▙▄▄▄▖▗▄▄▞▘▐▙▄▄▖  █  
+                    
+ ZSET --Store unique, ordered collections with scores (rankings)
+ ## IS ORDERED
+ 🟥 ZRANGE key start stop [WITHSCORES]: Get members by index (rank).
+ 🟥 ZRANGEBYSCORE key min max [WITHSCORES]: Get members by score range.
+ 🟥 ZREM key member: Remove a member.
+ 🟥 ZSCORE key member: Get the score of a specific member.
+ 🟥 ZRANK key member: Get the rank (0-based index) of a member.
+ 🟥 ZINCRBY key increment member: Increment the score of a member
+
+ ▗▄▄▖▗▄▄▄▖▗▄▄▄▖
+▐▌   ▐▌     █  
+ ▝▀▚▖▐▛▀▀▘  █  
+▗▄▄▞▘▐▙▄▄▖  █ 
+
+  SET -- Store unique, unordered collections of strings
+ 🟥 SADD key member [member ...]: Add one or more members to the set.
+ 🟥 SREM key member [member ...]: Remove one or more members.
+ 🟥 SISMEMBER key member: Check if a member exists in the set.
+ 🟥 SMEMBERS key: Get all members in the set.
+ 🟥 SUNION key [key ...]: Get the union of multiple sets.
+ 🟥 SINTER key [key ...]: Get the intersection of multiple sets.
+ 🟥 SDIFF key [key ...]: Get the difference between sets.
+ 🟥 SCARD key: Get the number of members in the set.
+ 🟥 SRANDMEMBER key [count]: Get one or more random members.

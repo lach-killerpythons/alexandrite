@@ -11,8 +11,44 @@ func TestRed(t *testing.T) {
 	if err != nil {
 		t.Errorf("failed %s", err)
 	}
-	ss := GetAllKeys(rdb.GetP())
+	ss := rdb.GetAllKeys()
 	fmt.Println(string(ss))
+
+}
+
+func Print(args ...any) {
+	for i, v := range args {
+		fmt.Printf("[%d] %v\n", i, v)
+	}
+}
+
+// ✅ Function: Convert variadic ...any to []string
+func ToStringSlice(values ...any) []string {
+	strs := make([]string, len(values))
+	for i, v := range values {
+		strs[i] = fmt.Sprint(v)
+	}
+	return strs
+}
+
+// ✅ Functional polymorphism — you're passing different functions to change the behavior of ListDo.
+func TestDo(t *testing.T) {
+
+	fmt.Println("Print(...)")
+	rdb, err := NewRedDB("localhost", "", 2)
+	if err != nil {
+		t.Errorf("failed %s", err)
+	}
+	rdb.ListDo("jacaru_products", Print)
+
+	// pass additional function logic within the instance inside the ListDo(func(){...})
+	rdb.ListDo("jacaru_products", func(args ...any) {
+		stringList := ToStringSlice(args...)
+		fmt.Printf("Got %d items:\n", len(stringList))
+		for _, s := range stringList {
+			fmt.Println("-", s)
+		}
+	})
 
 }
 

@@ -12,9 +12,12 @@ func TestJade(t *testing.T) {
 	}
 	fmt.Println(ss)
 
-	result := GET_DB_credentials("mac")
+	result, err := GET_DB_creds("mac")
+	if err != nil {
+		t.Errorf("failed to get creds")
+	}
 	expected := []string{"tiamat", "5432", "hit_target", "minime.local", "1991", "1991"}
-	if result[0] != expected[0] {
-		t.Errorf("get_db_cred = %s, want %s", result, expected)
+	if result.Name != expected[0] {
+		t.Errorf("result = %s, want %s", result, expected)
 	}
 }

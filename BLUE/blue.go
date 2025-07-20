@@ -58,6 +58,10 @@ type id_sequence struct {
 	name string
 }
 
+func (DBx DB) GetP() *sql.DB {
+	return DBx.p
+}
+
 func DB_Connect(name string) (DB, error) {
 	var emptyDB DB
 	dbc, err := JADE.GET_DB_creds(name)
