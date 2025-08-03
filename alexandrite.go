@@ -2,45 +2,13 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"net/http"
-	"time"
 
 	"github.com/lach-killerpythons/alexandrite/BLUE"
 	"github.com/lach-killerpythons/alexandrite/JADE"
-	_ "github.com/lach-killerpythons/alexandrite/JADE"
 	"github.com/lach-killerpythons/alexandrite/RED"
 )
 
-func URL_Get(baseURL string) (string, error) {
-	// parsedURL, err := url.Parse(baseURL)
-	// if err != nil {
-	// 	return "", fmt.Errorf("invalid URL: %w", err)
-	// }
-	//robotsURL := fmt.Sprintf("%s://%s/robots.txt", parsedURL.Scheme, parsedURL.Host)
-	// set timeout
-	client := &http.Client{
-		Timeout: 120 * time.Second, // Set timeout to 120 seconds
-	}
 
-	resp, err := client.Get(baseURL)
-	if err != nil {
-		return "", fmt.Errorf("failed to fetch robots.txt: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("non-OK HTTP status: %s", resp.Status)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-
-	if err != nil {
-		return "", fmt.Errorf("failed to read response body: %w", err)
-	}
-	return string(body), nil
-
-}
 
 // eg: select website from sandstone where robots LIKE '%shopify%';
 func BlueToRed_1dList(rdb RED.RedDB, db BLUE.DB, query string, keyname string) error {
@@ -71,9 +39,6 @@ func BlueToRed_1dList(rdb RED.RedDB, db BLUE.DB, query string, keyname string) e
 }
 
 func main() {
-	//db, err := BLUE.DB_Connect("local")
-	//cwd, _ := os.Getwd() // fix jade to get CWD
-	//jf := JADE.JADE_FILE{"db.json", cwd + "/JADE"}
 	jf := JADE.Open("db.json", "/JADE")
 	db, err := BLUE.DB_JadeConnect("local", jf)
 	if err != nil {
@@ -84,12 +49,6 @@ func main() {
 		fmt.Println(OpenTable_err)
 	}
 
-	test_url := `https://kitandcradle.com.au/`
-	sm, err := URL_Get(test_url + `sitemap.xml`)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(sm)
 
 	// rdb, err := RED.NewRedDB("localhost", "", 2)
 	// if err != nil {

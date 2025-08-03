@@ -260,9 +260,9 @@ func (rdbX RedDB) List2_1wordset(listName string, setName string) {
 
 }
 
+// Run any function on an entire redis list
+// see red_test.go for example functions
 func (rdbX RedDB) ListDo(listName string, f func(...any)) {
-	//r_query := fmt.Sprintf(`lrange %s 0 -1`, listName)
-	// result, err := rdbX.GetP().Do(CTX, "LRANGE", listName, 0, -1).Result()
 	result, err := rdbX.GetP().Do(CTX, "LRANGE", listName, 0, -1).Result()
 	if err != nil {
 		fmt.Printf("Redis LRANGE error: %v", err)
@@ -278,6 +278,12 @@ func (rdbX RedDB) ListDo(listName string, f func(...any)) {
 	f(items...)
 
 }
+
+// AnyDo --> get any redis key type and do something
+
+// (pass key name) -> get type
+
+// switch for type -> get all
 
 func (rdbX RedDB) AddToHSet(hsetName, keyname string, val interface{}) {
 	rdb := rdbX.p

@@ -22,7 +22,7 @@ var (
 )
 
 type DB struct {
-	p        *sql.DB // pointer to DB
+	p        *sql.DB
 	Host     string
 	Port     int
 	User     string
@@ -279,19 +279,25 @@ func (DBx *DB) OpenTable(tableName string) error {
 	return nil
 }
 
+type SQL_VAR struct {
+	var_type SQL_TYPE
+	var_name string
+}
+
+type SQL_TYPE string
+
+//var pkey PrimaryKey
+
+const (
+	SQL_TEXT       SQL_TYPE = "TEXT"
+	SQL_INT        SQL_TYPE = "INT"
+	SQL_FLOAT      SQL_TYPE = "DOUBLE PRECISION"
+	SQL_BYTE_ARRAY SQL_TYPE = "BYTEA"
+	SQL_TEXT_ARRAY SQL_TYPE = "TEXT[]"
+)
+
 func get_SQL_TYPE(input interface{}) (string, error) {
 	var typeStr string
-
-	type SQL_TYPE string
-	//var pkey PrimaryKey
-
-	const (
-		SQL_TEXT       SQL_TYPE = "TEXT"
-		SQL_INT        SQL_TYPE = "INT"
-		SQL_FLOAT      SQL_TYPE = "DOUBLE PRECISION"
-		SQL_BYTE_ARRAY SQL_TYPE = "BYTEA"
-		SQL_TEXT_ARRAY SQL_TYPE = "TEXT[]"
-	)
 
 	switch input.(type) {
 	case int:
@@ -311,7 +317,7 @@ func get_SQL_TYPE(input interface{}) (string, error) {
 	return typeStr, nil
 }
 
-// infer text or int
+// CREATE A NEW TABLE!
 func (DBx *DB) CREATE_TABLE_v1(tableName string, cols []interface{}, colNames []string, args ...any) error {
 	var err error = nil
 	var result sql.Result
@@ -476,6 +482,41 @@ func (DBx DB) QueryToJSON(query string) ([]byte, error) {
 	return json.MarshalIndent(results, "", "  ")
 }
 
+// return a single string from any query
+// query := fmt.Sprintf(`select sitemap from yellowstone where id=%d;`, i)
+func (dbx DB) QueryToStr(query string) (string, error) {
+	rows, err := dbx.p.Query(query)
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+	var ss string
+	for rows.Next() {
+		err := rows.Scan(&ss)
+		if err != nil {
+			fmt.Println(err)
+			return "", err
+		}
+
+	}
+	return ss, nil
+
+}
+
+// return error from exec query (SET, INSERT, DELETE)
+// update yellowstone SET product_pages = array_append(product_pages,'%s') WHERE id = %d;
+func (dbx DB) QueryToResult(query string) error {
+	result, err := dbx.p.Exec(query)
+	if err != nil {
+		return err
+	}
+	n_Rows, err := result.RowsAffected()
+	fmt.Println("N rows: ", n_Rows)
+	return nil
+}
+
+// insert anything into TABLE
+// 💡 refactor a new version of this where input is not forced to be same length as N cols
 func (DBx DB) INSERT_WILD(vals []interface{}) error {
 
 	// concat any types for SQL query (type inference) 🔎
@@ -508,6 +549,7 @@ func (DBx DB) INSERT_WILD(vals []interface{}) error {
 		tableName := DBx.Table.Name
 		colNameStr := strings.Join(DBx.Table.Cols, ",")
 		db := DBx.p
+		//remove ! -> issue with primary key ID SERIAL
 		if len(vals) != len(DBx.Table.Cols) {
 			return fmt.Errorf("invalid number of args v column names")
 		}
