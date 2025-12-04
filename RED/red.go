@@ -164,6 +164,43 @@ func (rdbX RedDB) Txt2List(keyname string, targetFile string) {
 	}
 }
 
+// sometimes I want to export a RDB list out to a text file to use somewhere else
+func (rdbX RedDB) List2Text(listname string, outputFile string) error {
+	input, err := rdbX.BetterListGet(listname)
+	if err != nil {
+		fmt.Println("RedDB Error")
+		return err
+	}
+	// Open the file for writing. Create it if it doesn't exist, append if it does.
+	// 0644 sets the file permissions.
+	file, err := os.OpenFile(outputFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Printf("failed opening file: %s \n", err)
+		return err
+	}
+	defer file.Close() // Ensure the file is closed when the function exits
+
+	writer := bufio.NewWriter(file)
+
+	for _, line := range input {
+		fmt.Println(line)
+		_, err := writer.WriteString(line + "\n") // Write the line and a newline character
+		if err != nil {
+			fmt.Printf("failed writing to file: %s\n", err)
+		}
+	}
+
+	// Flush the buffer to ensure all data is written to the file
+	err = writer.Flush()
+	if err != nil {
+		fmt.Printf("failed flushing buffer: %s\n", err)
+	}
+
+	fmt.Printf("Successfully exported RDB List '%s' to %s\n", listname, outputFile)
+
+	return err
+}
+
 // get a random list item
 func (rdbX RedDB) List_RandItem(keyname string) string {
 	rdb := rdbX.p
@@ -262,6 +299,16 @@ func (rdbX RedDB) List2_1wordset(listName string, setName string) {
 
 // Run any function on an entire redis list
 // see red_test.go for example functions
+
+// best example function is
+// printItems := func(items ...any) {
+//     for _, item := range items {
+//         fmt.Println(item)
+//     }
+// }
+
+// this is a bit of a retarded way of forcing any type
+// this should always return a []string - so this isn't really needed
 func (rdbX RedDB) ListDo(listName string, f func(...any)) {
 	result, err := rdbX.GetP().Do(CTX, "LRANGE", listName, 0, -1).Result()
 	if err != nil {
@@ -277,6 +324,11 @@ func (rdbX RedDB) ListDo(listName string, f func(...any)) {
 
 	f(items...)
 
+}
+
+// use the LRange result directly and get the []string
+func (rdbX RedDB) BetterListGet(listName string) ([]string, error) {
+	return rdbX.GetP().LRange(CTX, listName, 0, -1).Result()
 }
 
 // AnyDo --> get any redis key type and do something

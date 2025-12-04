@@ -4,11 +4,8 @@ import (
 	"fmt"
 
 	"github.com/lach-killerpythons/alexandrite/BLUE"
-	"github.com/lach-killerpythons/alexandrite/JADE"
 	"github.com/lach-killerpythons/alexandrite/RED"
 )
-
-
 
 // eg: select website from sandstone where robots LIKE '%shopify%';
 func BlueToRed_1dList(rdb RED.RedDB, db BLUE.DB, query string, keyname string) error {
@@ -38,21 +35,34 @@ func BlueToRed_1dList(rdb RED.RedDB, db BLUE.DB, query string, keyname string) e
 	return nil
 }
 
+// new idea --> create API end point that is plug and play
+// API baby
+
 func main() {
-	jf := JADE.Open("db.json", "/JADE")
-	db, err := BLUE.DB_JadeConnect("local", jf)
+	// jf := JADE.Open("db.json", "/JADE")
+	// db, err := BLUE.DB_JadeConnect("local", jf)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// OpenTable_err := db.OpenTable("sandstone")
+	// if OpenTable_err != nil {
+	// 	fmt.Println(OpenTable_err)
+	// }
+
+	rdb, err := RED.NewRedDB("localhost", "", 0)
 	if err != nil {
 		panic(err)
 	}
-	OpenTable_err := db.OpenTable("sandstone")
-	if OpenTable_err != nil {
-		fmt.Println(OpenTable_err)
+
+	if err != nil {
+		panic(err)
 	}
 
+	rdb.List2Text("animals", "animals.txt")
 
-	// rdb, err := RED.NewRedDB("localhost", "", 2)
-	// if err != nil {
-	// 	panic(err)
+	// animal_list, err := rdb.BetterListGet("animals")
+	// for _, item := range animal_list {
+	// 	fmt.Println(item)
 	// }
 
 	// add the URL list from psql to redis
