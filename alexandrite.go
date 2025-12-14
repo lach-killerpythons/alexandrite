@@ -58,7 +58,8 @@ func main() {
 		panic(err)
 	}
 
-	rdb.List2Text("animals", "animals.txt")
+	// rdb.List2Text("animals", "animals.txt")
+	rdb.Set2Text("animal_set", "animals.txt")
 
 	// animal_list, err := rdb.BetterListGet("animals")
 	// for _, item := range animal_list {

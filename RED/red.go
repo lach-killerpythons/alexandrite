@@ -145,6 +145,48 @@ func (rdbX RedDB) AddToSet(setname string, inputs interface{}) {
 	fmt.Println("AddToSet", result)
 }
 
+// use the LRange result directly and get the []string
+func (rdbX RedDB) SetGet(setName string) ([]string, error) {
+	//return rdbX.GetP().LRange(CTX, listName, 0, -1).Result()
+	return rdbX.GetP().SMembers(CTX, setName).Result()
+}
+
+func (rdbX RedDB) Set2Text(setname string, outputFile string) error {
+	input, err := rdbX.SetGet(setname)
+	if err != nil {
+		fmt.Println("RedDB Error")
+		return err
+	}
+	// Open the file for writing. Create it if it doesn't exist, append if it does.
+	// 0644 sets the file permissions.
+	file, err := os.OpenFile(outputFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Printf("failed opening file: %s \n", err)
+		return err
+	}
+	defer file.Close() // Ensure the file is closed when the function exits
+
+	writer := bufio.NewWriter(file)
+
+	for _, line := range input {
+		fmt.Println(line)
+		_, err := writer.WriteString(line + "\n") // Write the line and a newline character
+		if err != nil {
+			fmt.Printf("failed writing to file: %s\n", err)
+		}
+	}
+
+	// Flush the buffer to ensure all data is written to the file
+	err = writer.Flush()
+	if err != nil {
+		fmt.Printf("failed flushing buffer: %s\n", err)
+	}
+
+	fmt.Printf("Successfully exported RDB List '%s' to %s\n", setname, outputFile)
+
+	return err
+}
+
 func (rdbX RedDB) Txt2List(keyname string, targetFile string) {
 	rdb := rdbX.p
 	file, err := os.Open(targetFile)
